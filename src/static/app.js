@@ -2,6 +2,8 @@ document.addEventListener("DOMContentLoaded", () => {
   // DOM elements
   const activitiesList = document.getElementById("activities-list");
   const messageDiv = document.getElementById("message");
+  const announcementBanner = document.getElementById("announcement-banner");
+  const dismissAnnouncementBtn = document.getElementById("dismiss-announcement");
   const registrationModal = document.getElementById("registration-modal");
   const modalActivityName = document.getElementById("modal-activity-name");
   const signupForm = document.getElementById("signup-form");
@@ -865,4 +867,25 @@ document.addEventListener("DOMContentLoaded", () => {
   checkAuthentication();
   initializeFilters();
   fetchActivities();
+  // Initialize announcement banner: hide if previously dismissed and wire up dismiss
+  try {
+    if (announcementBanner) {
+      if (localStorage.getItem("announcementDismissed") === "true") {
+        announcementBanner.classList.add("hidden");
+      }
+
+      if (dismissAnnouncementBtn) {
+        dismissAnnouncementBtn.addEventListener("click", () => {
+          announcementBanner.classList.add("hide");
+          // Wait for animation then hide completely
+          setTimeout(() => {
+            announcementBanner.classList.add("hidden");
+          }, 240);
+          localStorage.setItem("announcementDismissed", "true");
+        });
+      }
+    }
+  } catch (e) {
+    console.warn("Announcement banner initialization failed", e);
+  }
 });
